@@ -15,19 +15,22 @@ const Register = (props) => {
 
   const formReady = email && password && confirmPassword && (password === confirmPassword);
 
+  const handleRegister = (props) => {
+    navigation.reset({
+      index: 0,
+      routes: [{
+         name: 'Home'
+      }],
+    });
+  }
+
   return (
     <View style={[styles.container]}>
       <StatusBar style="light" />
       <LinearGradient
         colors={['#209cff', '#68e0cf']}
-        start={{
-          x: 0,
-          y: 0
-        }}
-        end={{
-          x: 1,
-          y: 1
-        }}
+        start={{x: 0, y: 0}}
+        end={{x: 1, y: 1}}
         style={styles.background}
       />
       <View style={[styles.card, styles.loginCard]}>
@@ -103,7 +106,7 @@ const Register = (props) => {
           <Button
             style={styles.buttonStyle}
             isDisabled={!formReady}
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => handleRegister()}
           >
             Register
           </Button>
@@ -126,7 +129,6 @@ export default () => {
     </NativeBaseProvider>
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {
