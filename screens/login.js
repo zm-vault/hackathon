@@ -5,24 +5,73 @@ import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { alignContent, flex, flexDirection, width } from 'styled-system';
 import baseStyles from '../components/styles';
 
 const Login = (props) => {
   const navigation = useNavigation();
 
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const formReady = email && password;
 
+  const setToken = async (value) => {
+    try {
+      await AsyncStorage.setItem('acme_token', value)
+    } catch (e) {
+      console.log(e)
+      // saving error
+    }
+  }
+
   const handleLogin = (props) => {
-    navigation.reset({
-      index: 0,
-      routes: [{
-         name: 'Home'
-      }],
+    setError('');
+    setLoading(true);
+
+    axios.post(
+      "http://127.0.0.1:5000/v1/login",
+      {
+        email: email,
+        password: password,
+      },
+      {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        }
+      },
+    )
+    .then((response) => {
+      setLoading(false);
+      // Handle the JWT response here
+      console.log(response)
+      if (response.token) {
+        setToken(response.token);
+      }
+      navigation.reset({
+        index: 0,
+        routes: [{
+           name: 'Home'
+        }],
+      });
+    })
+    .catch((error) => {
+      setLoading(false);
+      console.log(error)
+      if (error.err_msg) {
+        setError(error.error_msg);
+      } else {
+        setError('There was an error.');
+      }
+       // Handle returned errors here
     });
+
   }
 
   return (
@@ -91,7 +140,9 @@ const Login = (props) => {
               value={password || ''}
             />
           </View>
-
+          <Text styles={styles.loginErrMsg}>
+            {error}
+          </Text>
           {/* Button */}
           <View style={styles.inputWrap}>
             <Button
@@ -138,6 +189,7 @@ const styles = StyleSheet.create({
   textInput: baseStyles.textInput,
   inputWrap: baseStyles.inputWrap,
   buttonStyle: baseStyles.button,
+  loginErrMsg: baseStyles.loginErrMsg,
   loginCard: {
     shadowOpacity: 0,
     height: 'auto',

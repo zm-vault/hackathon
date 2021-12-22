@@ -73,4 +73,10 @@ module.exports = {
   dataLabelD: {
     marginBottom:12,
   },
+
+  loginErrMsg: {
+    color: 'red',
+    width: '100%',
+    textAlign: 'center',
+  }
 }
