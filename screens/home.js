@@ -29,51 +29,55 @@ const Home = (props) => {
       <TouchableWithoutFeedback
         onPressIn={() => navigation.navigate('Booking')}
       >
-        <View style={[styles.card, styles.buyCard]}>
-          <LinearGradient
-            colors={['#667eea', '#764ba2']}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 1}}
-            style={styles.buyCardBG}
-          />
-          <Text style={[styles.cardTitle, styles.buyCardText]}>
-            Buy Policy
-          </Text>
-          <View style={styles.cardContent}>
-            <View style={[styles.inputWrap, styles.buyCardInput]}>
-              <Input
-                variant="outline"
-                placeholder="Flight ID"
-                textContentType="text"
-                style={[styles.textInput]}
-                InputLeftElement={
-                  <FontAwesome5
-                    name="plane"
-                    size={30}
-                    color="rgba(0,0,0,0.5)"
-                    style={{marginLeft: 8}}
-                    solid
-                  />
-                }
-              />
+        <View style={styles.cardCon}>
+          <View style={[styles.card, styles.buyCard]}>
+            <LinearGradient
+              colors={['#667eea', '#764ba2']}
+              start={{x: 0, y: 0}}
+              end={{x: 1, y: 1}}
+              style={styles.buyCardBG}
+            />
+            <Text style={[styles.cardTitle, styles.buyCardText]}>
+              Buy Policy
+            </Text>
+            <View style={styles.cardContent}>
+              <View style={[styles.inputWrap, styles.buyCardInput]}>
+                <Input
+                  variant="outline"
+                  placeholder="Flight ID"
+                  style={[styles.textInput]}
+                  InputLeftElement={
+                    <FontAwesome5
+                      name="plane"
+                      size={30}
+                      color="rgba(0,0,0,0.5)"
+                      style={{marginLeft: 8}}
+                      solid
+                    />
+                  }
+                />
+              </View>
             </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
 
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>
-          Existing Policies
-        </Text>
-        <View style={styles.cardContent}>
-          <Button
-            title="Book Now"
-            onPress={() =>
-              this.props.navigation.navigate('Booking')
-            }
-          />
+      <View style={styles.cardCon}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>
+            Existing Policies
+          </Text>
+          <View style={styles.cardContent}>
+            <Button
+              title="Book Now"
+              onPress={() =>
+                this.props.navigation.navigate('Booking')
+              }
+            />
+          </View>
         </View>
       </View>
+
     </View>
   );
 }
@@ -106,6 +110,7 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   card: baseStyles.card,
+  cardCon: baseStyles.cardCon,
   Middle: baseStyles.center,
   textInput: baseStyles.textInput,
   inputWrap: baseStyles.inputWrap,

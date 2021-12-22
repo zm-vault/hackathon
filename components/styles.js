@@ -1,18 +1,24 @@
 module.exports = {
 
   card: {
+    padding: 24,
+    borderRadius: 12,
+    backgroundColor: '#ffffff',
+    overflow: 'hidden',
+  },
+
+  cardCon: {
+    backgroundColor: '#ffffff',
+    margin: 16,
+    marginBottom: 0,
+    borderRadius: 12,
     shadowOffset: {
       width: 0,
       height: 8,
     },
     shadowOpacity:0.2,
     shadowRadius:24,
-    margin: 16,
-    marginBottom: 0,
-    padding: 24,
-    borderRadius: 12,
-    backgroundColor: '#ffffff',
-    overflow: 'hidden',
+    elevation: 3,
   },
 
   cardTitle: {

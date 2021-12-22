@@ -34,77 +34,80 @@ const Login = (props) => {
         end={{x: 1, y: 1}}
         style={styles.background}
       />
-      <View style={[styles.card, styles.loginCard]}>
-        <View style={styles.Middle}>
-          <Text style={styles.LoginText}>Login</Text>
-        </View>
 
-        {/* Username or Email Input Field */}
-        <View style={styles.inputWrap}>
-          <Input
-            // InputLeftElement={
-            //   <Icon
-            //     as={<FontAwesome5 name="user-secret" />}
-            //     size="sm"
-            //     m={2}
-            //     _light={{
-            //       color: "black",
-            //     }}
-            //     _dark={{
-            //       color: "gray.300",
-            //     }}
-            //   />
-            // }
-            variant="outline"
-            placeholder="Email"
-            _light={{
-              placeholderTextColor: "blueGray.400",
-            }}
-            _dark={{
-              placeholderTextColor: "blueGray.50",
-            }}
-            textContentType="emailAddress"
-            style={styles.textInput}
-            onChangeText={text => setEmail(text)}
-            value={email || ''}
-            id="email"
-          />
-        </View>
+      <View style={styles.cardCon}>
+        <View style={[styles.card, styles.loginCard]}>
+          <View style={styles.Middle}>
+            <Text style={styles.LoginText}>Login</Text>
+          </View>
 
-        {/* Password Input Field */}
-        <View style={styles.inputWrap}>
-          <Input
-            variant="outline"
-            secureTextEntry={true}
-            placeholder="Password"
-            _light={{
-              placeholderTextColor: "blueGray.400",
-            }}
-            _dark={{
-              placeholderTextColor: "blueGray.50",
-            }}
-            textContentType="password"
-            style={styles.textInput}
-            onChangeText={text => setPassword(text)}
-            value={password || ''}
-          />
-        </View>
+          {/* Username or Email Input Field */}
+          <View style={styles.inputWrap}>
+            <Input
+              // InputLeftElement={
+              //   <Icon
+              //     as={<FontAwesome5 name="user-secret" />}
+              //     size="sm"
+              //     m={2}
+              //     _light={{
+              //       color: "black",
+              //     }}
+              //     _dark={{
+              //       color: "gray.300",
+              //     }}
+              //   />
+              // }
+              variant="outline"
+              placeholder="Email"
+              _light={{
+                placeholderTextColor: "blueGray.400",
+              }}
+              _dark={{
+                placeholderTextColor: "blueGray.50",
+              }}
+              textContentType="emailAddress"
+              style={styles.textInput}
+              onChangeText={text => setEmail(text)}
+              value={email || ''}
+              id="email"
+            />
+          </View>
 
-        {/* Button */}
-        <View style={styles.inputWrap}>
-          <Button
-            style={styles.buttonStyle}
-            isDisabled={!formReady}
-            onPress={() => handleLogin()}
-          >
-            Login
-          </Button>
-        </View>
-        <View style={styles.regText}>
-          <Text>Don't have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")} >
-            <Text style={styles.signupText}> Register</Text>
-          </TouchableOpacity>
+          {/* Password Input Field */}
+          <View style={styles.inputWrap}>
+            <Input
+              variant="outline"
+              secureTextEntry={true}
+              placeholder="Password"
+              _light={{
+                placeholderTextColor: "blueGray.400",
+              }}
+              _dark={{
+                placeholderTextColor: "blueGray.50",
+              }}
+              textContentType="password"
+              style={styles.textInput}
+              onChangeText={text => setPassword(text)}
+              value={password || ''}
+            />
+          </View>
+
+          {/* Button */}
+          <View style={styles.inputWrap}>
+            <Button
+              style={styles.buttonStyle}
+              isDisabled={!formReady}
+              onPress={() => handleLogin()}
+            >
+              Login
+            </Button>
+          </View>
+          <View style={styles.regText}>
+            <Text>Don't have an account? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Register")} >
+              <Text style={styles.signupText}> Register</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>
@@ -130,6 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   card: baseStyles.card,
+  cardCon: baseStyles.cardCon,
   Middle: baseStyles.center,
   textInput: baseStyles.textInput,
   inputWrap: baseStyles.inputWrap,

@@ -34,89 +34,91 @@ const Register = (props) => {
         end={{x: 1, y: 1}}
         style={styles.background}
       />
-      <View style={[styles.card, styles.loginCard]}>
-        <View style={styles.Middle}>
-          <Text style={styles.LoginText}>Register</Text>
-        </View>
+      <View style={styles.cardCon}>
+        <View style={[styles.card, styles.loginCard]}>
+          <View style={styles.Middle}>
+            <Text style={styles.LoginText}>Register</Text>
+          </View>
 
-        {/* Username or Email Input Field */}
-        <View style={styles.inputWrap}>
-          <Input
-            variant="outline"
-            placeholder="Email"
-            _light={{
-              placeholderTextColor: "blueGray.400",
-            }}
-            _dark={{
-              placeholderTextColor: "blueGray.50",
-            }}
-            textContentType="emailAddress"
-            style={styles.textInput}
-            onChangeText={text => setEmail(text)}
-            value={email}
-          />
-        </View>
+          {/* Username or Email Input Field */}
+          <View style={styles.inputWrap}>
+            <Input
+              variant="outline"
+              placeholder="Email"
+              _light={{
+                placeholderTextColor: "blueGray.400",
+              }}
+              _dark={{
+                placeholderTextColor: "blueGray.50",
+              }}
+              textContentType="emailAddress"
+              style={styles.textInput}
+              onChangeText={text => setEmail(text)}
+              value={email}
+            />
+          </View>
 
-        {/* Password Input Field */}
-        <View style={styles.inputWrap}>
-          <Input
-            variant="outline"
-            secureTextEntry={true}
-            placeholder="Password"
-            _light={{
-              placeholderTextColor: "blueGray.400",
-            }}
-            _dark={{
-              placeholderTextColor: "blueGray.50",
-            }}
-            textContentType="newPassword"
-            style={styles.textInput}
-            onChangeText={text => setPassword(text)}
-            value={password}
-          />
-        </View>
-        <View style={[styles.inputWrap, styles.passConfirm]}>
-          <Input
-            variant="outline"
-            secureTextEntry={true}
-            placeholder="Confirm Password"
-            _light={{
-              placeholderTextColor: "blueGray.400",
-            }}
-            _dark={{
-              placeholderTextColor: "blueGray.50",
-            }}
-            textContentType="newPassword"
-            style={styles.textInput}
-            onChangeText={text => setConfirmPassword(text)}
-            value={confirmPassword}
-          />
-          <Text
-            style={styles.passConfirmErr}
-          >
-            {password && confirmPassword && (password !== confirmPassword) ? (
-              'Passwords do not match'
-            ) : (
-              ''
-            )}
-          </Text>
-        </View>
+          {/* Password Input Field */}
+          <View style={styles.inputWrap}>
+            <Input
+              variant="outline"
+              secureTextEntry={true}
+              placeholder="Password"
+              _light={{
+                placeholderTextColor: "blueGray.400",
+              }}
+              _dark={{
+                placeholderTextColor: "blueGray.50",
+              }}
+              textContentType="newPassword"
+              style={styles.textInput}
+              onChangeText={text => setPassword(text)}
+              value={password}
+            />
+          </View>
+          <View style={[styles.inputWrap, styles.passConfirm]}>
+            <Input
+              variant="outline"
+              secureTextEntry={true}
+              placeholder="Confirm Password"
+              _light={{
+                placeholderTextColor: "blueGray.400",
+              }}
+              _dark={{
+                placeholderTextColor: "blueGray.50",
+              }}
+              textContentType="newPassword"
+              style={styles.textInput}
+              onChangeText={text => setConfirmPassword(text)}
+              value={confirmPassword}
+            />
+            <Text
+              style={styles.passConfirmErr}
+            >
+              {password && confirmPassword && (password !== confirmPassword) ? (
+                'Passwords do not match'
+              ) : (
+                ''
+              )}
+            </Text>
+          </View>
 
-        {/* Button */}
-        <View style={styles.inputWrap}>
-          <Button
-            style={styles.buttonStyle}
-            isDisabled={!formReady}
-            onPress={() => handleRegister()}
-          >
-            Register
-          </Button>
-        </View>
-        <View style={styles.regText}>
-          <Text>Already have an account? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Login")} >
-            <Text style={styles.signupText}> Login</Text>
-          </TouchableOpacity>
+          {/* Button */}
+          <View style={styles.inputWrap}>
+            <Button
+              style={styles.buttonStyle}
+              isDisabled={!formReady}
+              onPress={() => handleRegister()}
+            >
+              Register
+            </Button>
+          </View>
+          <View style={styles.regText}>
+            <Text>Already have an account? </Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Login")} >
+              <Text style={styles.signupText}> Login</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     </View>

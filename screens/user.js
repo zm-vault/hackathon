@@ -11,33 +11,65 @@ const User = (props) => {
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>
-          User
-        </Text>
-        <View style={styles.cardContent}>
-          <View style={styles.dataLabelC}>
-            <Text style={styles.dataLabelL}>
-              Name:
-            </Text>
-            <Text style={styles.dataLabelD}>
-              John Smith
-            </Text>
+      <View style={styles.cardCon}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>
+            User
+          </Text>
+          <View style={styles.cardContent}>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Name:
+              </Text>
+              <Text style={styles.dataLabelD}>
+                John Smith
+              </Text>
+            </View>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Email:
+              </Text>
+              <Text style={styles.dataLabelD}>
+                placeholder@email.com
+              </Text>
+            </View>
           </View>
-          <View style={styles.dataLabelC}>
-            <Text style={styles.dataLabelL}>
-              Email:
-            </Text>
-            <Text style={styles.dataLabelD}>
-              placeholder@email.com
-            </Text>
-          </View>
+          <Button
+            style={styles.buttonStyle}
+          >
+            Logout
+          </Button>
         </View>
-        <Button
-          style={styles.buttonStyle}
-        >
-          Logout
-        </Button>
+      </View>
+      <View style={styles.cardCon}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>
+            Support
+          </Text>
+          <View style={styles.cardContent}>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Name:
+              </Text>
+              <Text style={styles.dataLabelD}>
+                John Smith
+              </Text>
+            </View>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Email:
+              </Text>
+              <Text style={styles.dataLabelD}>
+                placeholder@email.com
+              </Text>
+            </View>
+          </View>
+          <Button
+            style={styles.buttonStyle}
+          >
+            Logout
+          </Button>
+        </View>
       </View>
     </View>
   );
@@ -62,6 +94,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   card: baseStyles.card,
+  cardCon: baseStyles.cardCon,
   Middle: baseStyles.center,
   textInput: baseStyles.textInput,
   inputWrap: baseStyles.inputWrap,
