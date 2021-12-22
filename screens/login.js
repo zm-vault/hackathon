@@ -6,7 +6,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { alignContent, flex, flexDirection, width } from 'styled-system';
-
+import baseStyles from '../components/styles';
 
 const Login = (props) => {
   const navigation = useNavigation();
@@ -129,18 +129,11 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     justifyContent: 'center',
   },
-  card: {
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity:0.2,
-    shadowRadius:24,
-    margin: 10,
-    padding: 24,
-    borderRadius: 12,
-    backgroundColor: '#ffffff',
-  },
+  card: baseStyles.card,
+  Middle: baseStyles.center,
+  textInput: baseStyles.textInput,
+  inputWrap: baseStyles.inputWrap,
+  buttonStyle: baseStyles.button,
   loginCard: {
     shadowOpacity: 0,
     height: 'auto',
@@ -153,10 +146,6 @@ const styles = StyleSheet.create({
     right:0,
     bottom:0,
     top: 0,
-  },
-  Middle:{
-    alignItems:'center',
-    justifyContent:'center',
   },
   LoginText: {
     color: '#28241d',
@@ -176,28 +165,6 @@ const styles = StyleSheet.create({
   emailField:{
     marginTop:30,
     marginLeft:15
-  },
-  textInput:{
-    paddingTop:16,
-    paddingBottom:16,
-    paddingLeft:16,
-    paddingRight:16,
-  },
-  inputWrap:{
-    marginTop:15,
-    marginLeft:15,
-    marginRight:15
-  },
-  buttonStyle:{
-    marginTop:30,
-    marginLeft:15,
-    marginRight:15
-  },
-  buttonStyle:{
-    paddingTop:12,
-    paddingBottom:12,
-    paddingLeft:12,
-    paddingRight:12,
   },
   lineStyle:{
     flexDirection:'row',
