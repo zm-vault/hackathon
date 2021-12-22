@@ -31,6 +31,8 @@ const Home = (props) => {
       >
         <View style={styles.cardCon}>
           <View style={[styles.card, styles.buyCard]}>
+            <View style={styles.buyCardOverlay}>
+            </View>
             <LinearGradient
               colors={['#667eea', '#764ba2']}
               start={{x: 0, y: 0}}
@@ -39,6 +41,9 @@ const Home = (props) => {
             />
             <Text style={[styles.cardTitle, styles.buyCardText]}>
               Buy Policy
+            </Text>
+            <Text style={[styles.cardText, styles.buyCardText]}>
+              Enter your flight ID below to get started.
             </Text>
             <View style={styles.cardContent}>
               <View style={[styles.inputWrap, styles.buyCardInput]}>
@@ -55,6 +60,8 @@ const Home = (props) => {
                       solid
                     />
                   }
+                  isDisabled
+                  onPressIn={() => navigation.navigate('Booking')}
                 />
               </View>
             </View>
@@ -70,9 +77,7 @@ const Home = (props) => {
           <View style={styles.cardContent}>
             <Button
               title="Book Now"
-              onPress={() =>
-                this.props.navigation.navigate('Booking')
-              }
+              onPress={() => navigation.navigate('Booking')}
             />
           </View>
         </View>
@@ -134,7 +139,22 @@ const styles = StyleSheet.create({
   },
   buyCardInput: {
     backgroundColor: 'white',
-    borderRadius: 4,
-    overflow: 'hidden',
+    borderRadius: 12,
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity:0.4,
+    shadowRadius:24,
+    elevation: 3,
   },
+  buyCardOverlay: {
+    backgroundColor: 'rgba(255,255,255,0)',
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+  }
 });

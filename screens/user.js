@@ -5,8 +5,6 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import baseStyles from '../components/styles';
 
-const logo = require('../assets/images/logo_transparent.png');
-
 const User = (props) => {
   return (
     <View style={styles.container}>
@@ -49,26 +47,13 @@ const User = (props) => {
           <View style={styles.cardContent}>
             <View style={styles.dataLabelC}>
               <Text style={styles.dataLabelL}>
-                Name:
+                Customer Support:
               </Text>
               <Text style={styles.dataLabelD}>
-                John Smith
-              </Text>
-            </View>
-            <View style={styles.dataLabelC}>
-              <Text style={styles.dataLabelL}>
-                Email:
-              </Text>
-              <Text style={styles.dataLabelD}>
-                placeholder@email.com
+                placeholder@acme.com
               </Text>
             </View>
           </View>
-          <Button
-            style={styles.buttonStyle}
-          >
-            Logout
-          </Button>
         </View>
       </View>
     </View>

@@ -141,7 +141,6 @@ const styles = StyleSheet.create({
   loginCard: {
     shadowOpacity: 0,
     height: 'auto',
-    marginHorizontal: 20,
     paddingVertical: 40,
   },
   background: {

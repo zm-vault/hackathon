@@ -24,6 +24,7 @@ module.exports = {
   cardTitle: {
     paddingBottom: 12,
     fontWeight: 'bold',
+    fontSize: 18,
   },
 
   cardContent: {

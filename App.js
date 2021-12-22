@@ -31,7 +31,8 @@ const mainHeader = ({navigation}) => ({
   ),
 });
 
-const smallHeader = ({navigation}) => ({
+const smallHeader = ({navigation}, title) => ({
+  title: title,
   headerBackTitleVisible: false,
   headerTitleAlign: 'center',
   headerTintColor: '#fff',
@@ -73,7 +74,7 @@ const App = (props) => {
         <Stack.Screen
           name="Account"
           component={User}
-          options={smallHeader}
+          options={({navigation}) => smallHeader({navigation}, 'Account')}
         />
         <Stack.Screen
           name="Home"
@@ -83,7 +84,7 @@ const App = (props) => {
         <Stack.Screen
           name="Booking"
           component={Booking}
-          options={mainHeader}
+          options={({navigation}) => smallHeader({navigation}, 'New Policy')}
         />
       </Stack.Navigator>
     </NavigationContainer>
