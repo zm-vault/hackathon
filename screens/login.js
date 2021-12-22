@@ -50,7 +50,7 @@ const Login = (props) => {
     .then((response) => {
       setLoading(false);
       // Handle the JWT response here
-      console.log(response)
+      console.log(456456, response)
       if (response.token) {
         setToken(response.token);
       }
@@ -63,9 +63,9 @@ const Login = (props) => {
     })
     .catch((error) => {
       setLoading(false);
-      console.log(error)
-      if (error.err_msg) {
-        setError(error.error_msg);
+      console.log(345345, error.response)
+      if (error.response.data.err_msg) {
+        setError(error.response.data.err_msg);
       } else {
         setError('There was an error.');
       }
