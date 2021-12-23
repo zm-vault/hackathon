@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import baseStyles from '../components/styles';
 
 const User = (props) => {
+  const navigation = useNavigation();
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('acme_token')
+    } catch(e) {
+      console.log(e);
+      return;
+    }
+    navigation.reset({
+      index: 0,
+      routes: [{
+         name: 'Login'
+      }],
+    });
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -34,6 +55,7 @@ const User = (props) => {
           </View>
           <Button
             style={styles.buttonStyle}
+            onPress={() => handleLogout()}
           >
             Logout
           </Button>

@@ -59,35 +59,30 @@ const smallHeader = ({navigation}, title) => ({
 });
 
 const App = (props) => {
+  const [token, setToken] = useState('');
 
-  const setToken = async (value) => {
+  const getToken = async (value) => {
     try {
-      await AsyncStorage.setItem('@storage_Key', value)
+      return await AsyncStorage.getItem('acme_token')
     } catch (e) {
       console.log(e)
       // saving error
     }
   }
 
-  const getToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem('@storage_Key')
-      if(value !== null) {
-        // value previously stored
-      }
-    } catch(e) {
-      // error reading value
-    }
+  const isLoggedIn = (props) => {
+    getToken()
   }
-
-  useEffect(() => {
-    setToken('bumfluff');
-    getToken();
-  }, []);
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        initialRouteName={isLoggedIn() ? (
+          'Home'
+        ) : (
+          'Login'
+        )}
+      >
         <Stack.Screen
           name="Login"
           component={Login}

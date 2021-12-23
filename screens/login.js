@@ -1,5 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -8,7 +8,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { alignContent, flex, flexDirection, width } from 'styled-system';
 import baseStyles from '../components/styles';
 
 const Login = (props) => {
@@ -36,7 +35,7 @@ const Login = (props) => {
     setLoading(true);
 
     axios.post(
-      "http://127.0.0.1:5000/v1/login",
+      "http://192.168.1.102:5000/v1/login",
       {
         email: email,
         password: password,
@@ -49,10 +48,9 @@ const Login = (props) => {
     )
     .then((response) => {
       setLoading(false);
-      // Handle the JWT response here
-      console.log(456456, response)
-      if (response.token) {
-        setToken(response.token);
+      // Handle the JWT response here)
+      if (response.data.token) {
+        setToken(response.data.token);
       }
       navigation.reset({
         index: 0,
@@ -61,11 +59,11 @@ const Login = (props) => {
         }],
       });
     })
-    .catch((error) => {
+    .catch((e) => {
+      console.log(e);
       setLoading(false);
-      console.log(345345, error.response)
-      if (error.response.data.err_msg) {
-        setError(error.response.data.err_msg);
+      if (e.response.data.err_msg) {
+        setError(e.response.data.err_msg);
       } else {
         setError('There was an error.');
       }

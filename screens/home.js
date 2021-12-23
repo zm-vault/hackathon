@@ -1,15 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import baseStyles from '../components/styles';
 
 const logo = require('../assets/images/logo_transparent.png');
 
 const Home = (props) => {
+
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('acme_token');
+      if (value) {
+        return value;
+      }
+    } catch(e) {
+      console.log(e);
+      return null;
+      // error reading value
+    }
+  }
+
   const navigation = useNavigation();
   return (
     <View style={styles.container}>

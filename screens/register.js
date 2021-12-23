@@ -1,27 +1,73 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
+import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { alignContent, flex, flexDirection, width } from 'styled-system';
 import baseStyles from '../components/styles';
 
 const Register = (props) => {
   const navigation = useNavigation();
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const formReady = email && password && confirmPassword && (password === confirmPassword);
 
+  const setToken = async (value) => {
+    try {
+      await AsyncStorage.setItem('acme_token', value)
+    } catch (e) {
+      console.log(e)
+      // saving error
+    }
+  }
+
   const handleRegister = (props) => {
-    navigation.reset({
-      index: 0,
-      routes: [{
-         name: 'Home'
-      }],
+    setError('');
+    setLoading(true);
+
+    axios.post(
+      "http://192.168.1.102:5000/v1/register",
+      {
+        email: email,
+        password: password,
+      },
+      {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        }
+      },
+    )
+    .then((response) => {
+      setLoading(false);
+      // Handle the JWT response here
+      if (response.data.token) {
+        setToken(response.data.token);
+      }
+      navigation.reset({
+        index: 0,
+        routes: [{
+           name: 'Home'
+        }],
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+      setLoading(false);
+      if (error.response.data.err_msg) {
+        setError(error.response.data.err_msg);
+      } else {
+        setError('There was an error.');
+      }
+       // Handle returned errors here
     });
   }
 
@@ -102,7 +148,9 @@ const Register = (props) => {
               )}
             </Text>
           </View>
-
+          <Text styles={styles.loginErrMsg}>
+            {error}
+          </Text>
           {/* Button */}
           <View style={styles.inputWrap}>
             <Button
@@ -147,6 +195,7 @@ const styles = StyleSheet.create({
   textInput: baseStyles.textInput,
   inputWrap: baseStyles.inputWrap,
   buttonStyle: baseStyles.button,
+  loginErrMsg: baseStyles.loginErrMsg,
   loginCard: {
     shadowOpacity: 0,
     height: 'auto',
