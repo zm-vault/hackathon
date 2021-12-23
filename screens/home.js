@@ -81,7 +81,6 @@ const Home = (props) => {
 
   const policyLoop = policies && policies.map((item, index) => {
 
-    console.log(456456, item)
     let humDeparture = '--';
     if (item.departureScheduledTimeTimestamp) {
       humDeparture = moment.unix(item.departureScheduledTimeTimestamp).format('MMMM Do YYYY, h:mm:ss a');
@@ -217,7 +216,17 @@ const Home = (props) => {
             {policyLoop && policyLoop.length ? (
               policyLoop
             ) : (
-              <Text>No Policies</Text>
+              <View>
+                <Text>No Policies</Text>
+                <View style={styles.inputWrap}>
+                  <Button
+                    style={styles.buttonStyle}
+                    onPress={() => isLoggedIn()}
+                  >
+                    Refresh
+                  </Button>
+                </View>
+              </View>
             )}
           </View>
         </View>

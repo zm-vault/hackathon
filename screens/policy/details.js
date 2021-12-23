@@ -3,7 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
+import { Divider, Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -68,7 +68,7 @@ const Details = (props) => {
     )
     .then((response) => {
       if (response.data) {
-        setPolicies(response.data);
+        setPolicy(response.data);
       }
     })
     .catch((e) => {
@@ -129,9 +129,22 @@ const Details = (props) => {
 
   }
 
+  console.log(234234234, policy)
+
+  let humDeparture;
+  if (policy && policy.departureScheduledTimeTimestamp) {
+    humDeparture = moment.unix(policy.departureScheduledTimeTimestamp).format('MMMM Do YYYY, h:mm:ss a');
+  }
+
+  let humLocalDeparture;
+  if (policy && policy.departureScheduledLocalTime) {
+    humLocalDeparture = moment(policy.departureScheduledLocalTime).format('MMMM Do YYYY, h:mm:ss a');
+  }
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="light" />
+
       <View style={styles.cardCon}>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>
@@ -139,32 +152,63 @@ const Details = (props) => {
           </Text>
           <View style={styles.cardContent}>
 
-            <View style={styles.cardContent}>
-              <View style={styles.dataLabelC}>
-                <Text style={styles.dataLabelL}>
-                  Name:
-                </Text>
-                <Text style={styles.dataLabelD}>
-                  John Smith
-                </Text>
-              </View>
-              <View style={styles.dataLabelC}>
-                <Text style={styles.dataLabelL}>
-                  Email:
-                </Text>
-                <Text style={styles.dataLabelD}>
-                  placeholder@email.com
-                </Text>
-              </View>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Status:
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {policy.status || '--'}
+              </Text>
+            </View>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Insurance Cost ($):
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {policy.insuranceCost || '--'}
+              </Text>
+            </View>
+          </View>
+
+          <Divider my="4" />
+
+          <Text style={styles.cardTitle}>
+            Policy Payouts
+          </Text>
+
+          <View style={styles.cardContent}>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Cancellation Refund Amount ($):
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {policy.cancelRefundAmount || '--'}
+              </Text>
             </View>
 
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                3-6 Hours Delay Refund Amount ($):
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {policy.moreThan3HoursLessThan6Amaount || '--'}
+              </Text>
+            </View>
+
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                6+ Hours Delay Refund Amount ($):
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {policy.moreThan6HoursAmount || '--'}
+              </Text>
+            </View>
 
             {policy && policy.status === 'PENDING' ? (
               <View>
                 <View style={styles.inputWrap}>
                   <Button
                     style={styles.buttonStyle}
-                    isDisabled={!formReady}
                     onPress={() => handleGetQuote()}
                   >
                     Accept
@@ -173,7 +217,7 @@ const Details = (props) => {
                 <View style={styles.inputWrap}>
                   <Button
                     style={styles.buttonStyle}
-                    isDisabled={!formReady}
+                    colorScheme="secondary"
                     onPress={() => handleGetQuote()}
                   >
                     Reject
@@ -183,7 +227,75 @@ const Details = (props) => {
             ) : (
               null
             )}
+          </View>
+        </View>
+      </View>
 
+      <View style={styles.cardCon}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>
+            Flight Details
+          </Text>
+          <View style={styles.cardContent}>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Flight ID/Code:
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {policy.flightCode || '--'}
+              </Text>
+            </View>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Ticket Price ($):
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {policy.ticketPrice || '--'}
+              </Text>
+            </View>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Departure:
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {humDeparture || '--'}
+              </Text>
+            </View>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Departure (Local Time):
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {humLocalDeparture || '--'}
+              </Text>
+            </View>
+
+          </View>
+        </View>
+      </View>
+
+      <View style={styles.cardCon}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>
+            Passenger Details
+          </Text>
+          <View style={styles.cardContent}>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Name:
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {policy.fullName || '--'}
+              </Text>
+            </View>
+            <View style={styles.dataLabelC}>
+              <Text style={styles.dataLabelL}>
+                Age:
+              </Text>
+              <Text style={styles.dataLabelD}>
+                {policy.age || '--'}
+              </Text>
+            </View>
           </View>
         </View>
       </View>
