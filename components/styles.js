@@ -47,6 +47,12 @@ module.exports = {
     marginTop:15,
   },
 
+  inputLabel: {
+    fontWeight:'bold',
+    opacity: 0.6,
+    marginBottom: 8,
+  },
+
   button: {
     paddingTop:12,
     paddingBottom:12,
@@ -78,5 +84,10 @@ module.exports = {
     color: 'red',
     width: '100%',
     textAlign: 'center',
-  }
+  },
+
+  bottomSpacer: {
+    minHeight: 80,
+    width: '100%',
+  },
 }
