@@ -20,6 +20,8 @@ const Details = (props) => {
   const [loading, setLoading] = useState(false);
 
   const [policy, setPolicy] = useState('');
+  const [hasAccepted, setHasAccepted] = useState(false);
+  const [hasRejected, setHasRejected] = useState(false);
 
   const getToken = async () => {
     try {
@@ -84,33 +86,42 @@ const Details = (props) => {
     getPolicy()
   }, []);
 
-  const acceptPolicy = (props) => {
+  const handleAcceptPolicy = async () => {
+    getToken()
+    .then(data => {
+      if (data) {
+        acceptPolicy(data);
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{
+             name: 'Login'
+          }],
+        });
+      }
+    })
+  }
+
+  const acceptPolicy = (token) => {
     setError('');
     setLoading(true);
-
     axios.post(
       "http://35.190.192.18/v1/insurance/policy/modify",
       {
-        "policyId": policy.policyId
+        "policyId": policy.referenceId
       },
       {
         headers: {
+          "Authorization": token,
           "Access-Control-Allow-Origin": "*",
         }
       },
     )
     .then((response) => {
       setLoading(false);
-      // Handle the JWT response here)
-      if (response.data.token) {
-        setToken(response.data.token);
+      if (response.data) {
+        setHasAccepted(true);
       }
-      navigation.reset({
-        index: 0,
-        routes: [{
-           name: 'Home'
-        }],
-      });
     })
     .catch((e) => {
       console.log(e);
@@ -125,11 +136,55 @@ const Details = (props) => {
 
   }
 
-  const rejectPolicy = (props) => {
-
+  const handleRejectPolicy = async () => {
+    getToken()
+    .then(data => {
+      if (data) {
+        rejectPolicy(data);
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{
+             name: 'Login'
+          }],
+        });
+      }
+    })
   }
 
-  console.log(234234234, policy)
+  const rejectPolicy = (token) => {
+    setError('');
+    setLoading(true);
+    console.log(345345, token)
+    const url = 'http://35.190.192.18/v1/insurance/policy/modify?policyId=' + policy.referenceId;
+
+    axios.delete(
+      url,
+      {
+        headers: {
+          "Authorization": token,
+          "Access-Control-Allow-Origin": "*",
+        }
+      },
+    )
+    .then((response) => {
+      setLoading(false);
+      if (response) {
+        setHasRejected(true);
+      }
+    })
+    .catch((e) => {
+      console.log(e);
+      setLoading(false);
+      if (e.response.data.err_msg) {
+        setError(e.response.data.err_msg);
+      } else {
+        setError('There was an error.');
+      }
+       // Handle returned errors here
+    });
+
+  }
 
   let humDeparture;
   if (policy && policy.departureScheduledTimeTimestamp) {
@@ -139,6 +194,45 @@ const Details = (props) => {
   let humLocalDeparture;
   if (policy && policy.departureScheduledLocalTime) {
     humLocalDeparture = moment(policy.departureScheduledLocalTime).format('MMMM Do YYYY, h:mm:ss a');
+  }
+
+  if (hasAccepted || hasRejected) {
+    <ScrollView style={styles.container}>
+      <StatusBar style="light" />
+      <View style={styles.cardCon}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>
+            {hasAccepted ? (
+              'Policy Accepted'
+            ) : (null)}
+            {hasRejected ? (
+              'Policy Rejected'
+            ) : (null)}
+          </Text>
+          <View style={styles.cardContent}>
+            {hasAccepted ? (
+              <Text>
+                You have accepted the policy. This may take a minute to reflect in the app.
+              </Text>
+            ) : (null)}
+            {hasRejected ? (
+              <Text>
+                You have rejected the policy. This may take a minute to reflect in the app.
+              </Text>
+            ) : (null)}
+            <View style={styles.inputWrap}>
+              <Button
+                style={styles.buttonStyle}
+                onPress={() => navigation.reset({index: 0, routes: [{name: 'Home'}],})}
+              >
+                View Policies
+              </Button>
+            </View>
+          </View>
+        </View>
+      </View>
+      <View style={styles.bottomSpacer} />
+    </ScrollView>
   }
 
   return (
@@ -209,7 +303,7 @@ const Details = (props) => {
                 <View style={styles.inputWrap}>
                   <Button
                     style={styles.buttonStyle}
-                    onPress={() => handleGetQuote()}
+                    onPress={() => handleAcceptPolicy()}
                   >
                     Accept
                   </Button>
@@ -218,7 +312,7 @@ const Details = (props) => {
                   <Button
                     style={styles.buttonStyle}
                     colorScheme="secondary"
-                    onPress={() => handleGetQuote()}
+                    onPress={() => handleRejectPolicy()}
                   >
                     Reject
                   </Button>

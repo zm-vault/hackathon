@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
 import { Divider, Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -150,7 +150,7 @@ const Home = (props) => {
   });
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <StatusBar style="light" />
       <LinearGradient
         colors={['#209cff', '#68e0cf']}
@@ -218,21 +218,21 @@ const Home = (props) => {
             ) : (
               <View>
                 <Text>No Policies</Text>
-                <View style={styles.inputWrap}>
-                  <Button
-                    style={styles.buttonStyle}
-                    onPress={() => isLoggedIn()}
-                  >
-                    Refresh
-                  </Button>
-                </View>
               </View>
             )}
+            <View style={styles.inputWrap}>
+              <Button
+                style={styles.buttonStyle}
+                onPress={() => isLoggedIn()}
+              >
+                Refresh Policies
+              </Button>
+            </View>
           </View>
         </View>
       </View>
 
-    </View>
+    </ScrollView>
   );
 }
 
