@@ -5,13 +5,42 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import baseStyles from '../../components/styles';
 
-
 const Booking = (props) => {
   const [flightID, setFlightID] = useState('');
   const [flightCost, setFlightCost] = useState('');
   const [departure, setDeparture] = useState('');
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
+
+  const getToken = async () => {
+    try {
+      const token = await AsyncStorage.getItem('acme_token');
+      return token;
+    } catch(e) {
+      console.log(e);
+      // error reading value
+    }
+  }
+
+  const isLoggedIn = async () => {
+    getToken()
+    .then(data => {
+      if (data) {
+        return;
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{
+             name: 'Login'
+          }],
+        });
+      }
+    })
+  }
+
+  useEffect(() => {
+    isLoggedIn()
+  }, []);
 
   const flightIDRef = useRef(null);
 
@@ -24,7 +53,7 @@ const Booking = (props) => {
     if (useValue.split('.').length>2) {
       useValue = useValue.replace(/\.+$/,'');
     }
-    useValue = parseFloat(useValue).toFixed(2);
+    // useValue = parseFloat(useValue).toFixed(2);
     setFlightCost(useValue);
   }
 

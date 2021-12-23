@@ -21,6 +21,32 @@ const Login = (props) => {
 
   const formReady = email && password;
 
+  const getToken = async (value) => {
+    try {
+      const token = await AsyncStorage.getItem('acme_token');
+      return token;
+    } catch (e) {
+      console.log(e)
+      // saving error
+    }
+  }
+
+  const isLoggedIn = async () => {
+    getToken()
+    .then(data => {
+      if (data) {
+        navigation.reset({
+          index: 0,
+          routes: [{
+             name: 'Home'
+          }],
+        });
+      } else {
+        return false;
+      }
+    })
+  }
+
   const setToken = async (value) => {
     try {
       await AsyncStorage.setItem('acme_token', value)
@@ -71,6 +97,10 @@ const Login = (props) => {
     });
 
   }
+
+  useEffect(() => {
+    isLoggedIn()
+  }, []);
 
   return (
     <View style={[styles.container]}>

@@ -16,16 +16,33 @@ const Home = (props) => {
 
   const getToken = async () => {
     try {
-      const value = await AsyncStorage.getItem('acme_token');
-      if (value) {
-        return value;
-      }
+      const token = await AsyncStorage.getItem('acme_token');
+      return token;
     } catch(e) {
       console.log(e);
-      return null;
       // error reading value
     }
   }
+
+  const isLoggedIn = async () => {
+    getToken()
+    .then(data => {
+      if (data) {
+        return;
+      } else {
+        navigation.reset({
+          index: 0,
+          routes: [{
+             name: 'Login'
+          }],
+        });
+      }
+    })
+  }
+
+  useEffect(() => {
+    isLoggedIn()
+  }, []);
 
   const navigation = useNavigation();
   return (

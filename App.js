@@ -59,29 +59,12 @@ const smallHeader = ({navigation}, title) => ({
 });
 
 const App = (props) => {
-  const [token, setToken] = useState('');
-
-  const getToken = async (value) => {
-    try {
-      return await AsyncStorage.getItem('acme_token')
-    } catch (e) {
-      console.log(e)
-      // saving error
-    }
-  }
-
-  const isLoggedIn = (props) => {
-    getToken()
-  }
+  const [loggedIn, setLoggedIn] = useState(false);
 
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={isLoggedIn() ? (
-          'Home'
-        ) : (
-          'Login'
-        )}
+        initialRouteName={'Home'}
       >
         <Stack.Screen
           name="Login"
