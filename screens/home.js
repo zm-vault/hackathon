@@ -2,21 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback } from 'react-native';
-import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
+import { Divider, Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import moment from "moment";
 
 import baseStyles from '../components/styles';
 
 const logo = require('../assets/images/logo_transparent.png');
 
 const Home = (props) => {
+  const navigation = useNavigation();
+
+  const [token, setToken] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const [policies, setPolicies] = useState([]);
 
   const getToken = async () => {
     try {
       const token = await AsyncStorage.getItem('acme_token');
+      setToken(token);
       return token;
     } catch(e) {
       console.log(e);
@@ -28,7 +37,7 @@ const Home = (props) => {
     getToken()
     .then(data => {
       if (data) {
-        return;
+        handleGetPolicies(data);
       } else {
         navigation.reset({
           index: 0,
@@ -44,7 +53,103 @@ const Home = (props) => {
     isLoggedIn()
   }, []);
 
-  const navigation = useNavigation();
+  const handleGetPolicies = (token) => {
+    setError('');
+    setLoading(true);
+    axios.get(
+      "http://192.168.1.102:5000/v1/insurance/policy",
+      {
+        headers: {
+          "Authorization": token,
+          "Access-Control-Allow-Origin": "*",
+        }
+      },
+    )
+    .then((response) => {
+      if (response.data) {
+        setPolicies(response.data);
+      }
+    })
+    .catch((e) => {
+      if (e.response.data.err_msg) {
+        setError(e.response.data.err_msg);
+      } else {
+        setError('There was an error.');
+      }
+    });
+  }
+
+  useEffect(() => {
+
+  }, []);
+
+  const policyLoop = policies && policies.map((item, index) => {
+
+    let humDeparture = '--';
+    if (item.departureScheduledTimeTimestamp) {
+      humDeparture = moment.unix(item.departureScheduledTimeTimestamp).format('MMMM Do YYYY, h:mm:ss a');
+    }
+
+    let humLocalDeparture = '--';
+    if (item.departureScheduledLocalTime) {
+      humLocalDeparture = moment(item.departureScheduledLocalTime).format('MMMM Do YYYY, h:mm:ss a');
+    }
+
+    let humFlightCode = '--';
+    if (item.flightCode) {
+      humFlightCode = item.flightCode.toUpperCase();
+    }
+
+    return (
+      <View key={index}>
+        <View style={styles.dataLabelC}>
+          <Text style={styles.dataLabelL}>
+            Flight Code:
+          </Text>
+          <Text style={styles.dataLabelD}>
+            {humFlightCode}
+          </Text>
+        </View>
+        <View style={styles.dataLabelC}>
+          <Text style={styles.dataLabelL}>
+            Status:
+          </Text>
+          <Text style={styles.dataLabelD}>
+            {item.status || '--'}
+          </Text>
+        </View>
+        <View style={styles.dataLabelC}>
+          <Text style={styles.dataLabelL}>
+            Departure:
+          </Text>
+          <Text style={styles.dataLabelD}>
+            {humDeparture}
+          </Text>
+        </View>
+        <View style={styles.dataLabelC}>
+          <Text style={styles.dataLabelL}>
+            Departure (Local Time):
+          </Text>
+          <Text style={styles.dataLabelD}>
+            {humLocalDeparture}
+          </Text>
+        </View>
+        <View style={styles.inputWrap}>
+          <Button
+            style={styles.buttonStyle}
+          >
+            View Details
+          </Button>
+        </View>
+        {policies && policies.length > 1 ? (
+          <Divider my="6" />
+        ) : (
+          null
+        )}
+      </View>
+    );
+  });
+
   return (
     <View style={styles.container}>
       <StatusBar style="light" />
@@ -109,10 +214,11 @@ const Home = (props) => {
             Existing Policies
           </Text>
           <View style={styles.cardContent}>
-            <Button
-              title="Book Now"
-              onPress={() => navigation.navigate('Booking')}
-            />
+            {policyLoop && policyLoop.length ? (
+              policyLoop
+            ) : (
+              <Text>No Policies</Text>
+            )}
           </View>
         </View>
       </View>
@@ -156,6 +262,9 @@ const styles = StyleSheet.create({
   buttonStyle: baseStyles.button,
   cardTitle: baseStyles.cardTitle,
   cardContent: baseStyles.cardContent,
+  dataLabelC: baseStyles.dataLabelC,
+  dataLabelL: baseStyles.dataLabelL,
+  dataLabelD: baseStyles.dataLabelD,
   buyCard: {
     position: 'relative',
     backgroundColor: '#8ec5fc',

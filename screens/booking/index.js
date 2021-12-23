@@ -15,6 +15,7 @@ import ConfirmPolicy from './confirmpolicy';
 const Booking = (props) => {
   const navigation = useNavigation();
 
+  const [token, setToken] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -23,7 +24,6 @@ const Booking = (props) => {
   const [departure, setDeparture] = useState(new Date());
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
-  const [token, setToken] = useState('');
   const [humDeparture, setHumDeparture] = useState('');
 
   const [requested, setRequested] = useState(false);
