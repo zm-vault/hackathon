@@ -61,7 +61,7 @@ const Login = (props) => {
     setLoading(true);
 
     axios.post(
-      "http://192.168.1.102:5000/v1/login",
+      "http://35.190.192.18/v1/login",
       {
         email: email,
         password: password,

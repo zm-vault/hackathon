@@ -9,7 +9,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import User from './screens/user';
 import Home from './screens/home';
-import Booking from './screens/booking';
+import Booking from './screens/policy/index.js';
+import Details from './screens/policy/details.js';
 import Login from './screens/login';
 import Register from './screens/register';
 
@@ -90,6 +91,11 @@ const App = (props) => {
           name="Booking"
           component={Booking}
           options={({navigation}) => smallHeader({navigation}, 'New Policy')}
+        />
+        <Stack.Screen
+          name="Details"
+          component={Details}
+          options={({navigation}) => smallHeader({navigation}, 'Policy Details')}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationParam } from '@react-navigation/native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,7 +10,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 
 import baseStyles from '../../components/styles';
-import ConfirmPolicy from './confirmpolicy';
 
 const Booking = (props) => {
   const navigation = useNavigation();
@@ -91,7 +90,7 @@ const Booking = (props) => {
     setLoading(true);
 
     axios.post(
-      "http://192.168.1.102:5000/v1/insurance/policy",
+      "http://35.190.192.18/v1/insurance/policy",
       {
         "fullName": name,
         "flightCode": flightID,

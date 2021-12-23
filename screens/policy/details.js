@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Input, NativeBaseProvider, Button, Icon, Box, Image, AspectRatio } from 'native-base';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,21 +11,20 @@ import moment from "moment";
 
 import baseStyles from '../../components/styles';
 
-const ConfirmPolicy = (props) => {
+const Details = (props) => {
   const navigation = useNavigation();
+  const route = useRoute();
 
+  const [token, setToken] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const [flightID, setFlightID] = useState('');
-  const [flightCost, setFlightCost] = useState('');
-  const [departure, setDeparture] = useState('');
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
+  const [policy, setPolicy] = useState('');
 
   const getToken = async () => {
     try {
       const token = await AsyncStorage.getItem('acme_token');
+      setToken(token);
       return token;
     } catch(e) {
       console.log(e);
@@ -37,7 +36,7 @@ const ConfirmPolicy = (props) => {
     getToken()
     .then(data => {
       if (data) {
-        return;
+        getPolicy(data);
       } else {
         navigation.reset({
           index: 0,
@@ -53,14 +52,46 @@ const ConfirmPolicy = (props) => {
     isLoggedIn()
   }, []);
 
+  const getPolicy = (token) => {
+    const useID = route.params.policyId;
+    setError('');
+    setLoading(true);
+    const url = 'http://35.190.192.18/v1/insurance/policy?policyId=' + useID;
+    axios.get(
+      url,
+      {
+        headers: {
+          "Authorization": token,
+          "Access-Control-Allow-Origin": "*",
+        }
+      },
+    )
+    .then((response) => {
+      if (response.data) {
+        setPolicies(response.data);
+      }
+    })
+    .catch((e) => {
+      if (e.response.data.err_msg) {
+        setError(e.response.data.err_msg);
+      } else {
+        setError('There was an error.');
+      }
+    });
+  }
+
+  useEffect(() => {
+    getPolicy()
+  }, []);
+
   const acceptPolicy = (props) => {
     setError('');
     setLoading(true);
 
     axios.post(
-      "http://192.168.1.102:5000/v1/insurance/policy/modify",
+      "http://35.190.192.18/v1/insurance/policy/modify",
       {
-        "policyId": quote.policyId
+        "policyId": policy.policyId
       },
       {
         headers: {
@@ -94,79 +125,64 @@ const ConfirmPolicy = (props) => {
 
   }
 
+  const rejectPolicy = (props) => {
+
+  }
+
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="light" />
       <View style={styles.cardCon}>
         <View style={styles.card}>
           <Text style={styles.cardTitle}>
-            Policy Terms
+            Policy Details
           </Text>
           <View style={styles.cardContent}>
 
-            <View style={styles.dataLabelC}>
-              <Text style={styles.dataLabelL}>
-                Policy ID:
-              </Text>
-              <Text style={styles.dataLabelD}>
-                {quote.policyId || '--'}
-              </Text>
+            <View style={styles.cardContent}>
+              <View style={styles.dataLabelC}>
+                <Text style={styles.dataLabelL}>
+                  Name:
+                </Text>
+                <Text style={styles.dataLabelD}>
+                  John Smith
+                </Text>
+              </View>
+              <View style={styles.dataLabelC}>
+                <Text style={styles.dataLabelL}>
+                  Email:
+                </Text>
+                <Text style={styles.dataLabelD}>
+                  placeholder@email.com
+                </Text>
+              </View>
             </View>
 
-            <View style={styles.dataLabelC}>
-              <Text style={styles.dataLabelL}>
-                Insurance Cost ($):
-              </Text>
-              <Text style={styles.dataLabelD}>
-                {quote.insuranceCost || '--'}
-              </Text>
-            </View>
 
-            <View style={styles.dataLabelC}>
-              <Text style={styles.dataLabelL}>
-                Cancellation Refund ($):
-              </Text>
-              <Text style={styles.dataLabelD}>
-                {quote.cancelRefundAmount || '--'}
-              </Text>
-            </View>
-
-            <View style={styles.dataLabelC}>
-              <Text style={styles.dataLabelL}>
-                3-6 Hour Delay Refund ($):
-              </Text>
-              <Text style={styles.dataLabelD}>
-                {quote.moreThan3HoursLessThan6Amount || '--'}
-              </Text>
-            </View>
-
-            <View style={styles.dataLabelC}>
-              <Text style={styles.dataLabelL}>
-                6+ Hour Delay Refund ($):
-              </Text>
-              <Text style={styles.dataLabelD}>
-                {quote.moreThan6HoursAmount || '--'}
-              </Text>
-            </View>
-
-            <View style={styles.inputWrap}>
-              <Button
-                style={styles.buttonStyle}
-                isDisabled={!formReady}
-                onPress={() => handleGetQuote()}
-              >
-                Accept
-              </Button>
-            </View>
-            <View style={styles.inputWrap}>
-              <Button
-                style={styles.buttonStyle}
-                isDisabled={!formReady}
-                onPress={() => handleGetQuote()}
-              >
-                Reject
-              </Button>
-            </View>
+            {policy && policy.status === 'PENDING' ? (
+              <View>
+                <View style={styles.inputWrap}>
+                  <Button
+                    style={styles.buttonStyle}
+                    isDisabled={!formReady}
+                    onPress={() => handleGetQuote()}
+                  >
+                    Accept
+                  </Button>
+                </View>
+                <View style={styles.inputWrap}>
+                  <Button
+                    style={styles.buttonStyle}
+                    isDisabled={!formReady}
+                    onPress={() => handleGetQuote()}
+                  >
+                    Reject
+                  </Button>
+                </View>
+              </View>
+            ) : (
+              null
+            )}
 
           </View>
         </View>
@@ -179,7 +195,7 @@ const ConfirmPolicy = (props) => {
 export default () => {
   return (
     <NativeBaseProvider>
-      <ConfirmPolicy />
+      <Details />
     </NativeBaseProvider>
   )
 }

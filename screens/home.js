@@ -57,7 +57,7 @@ const Home = (props) => {
     setError('');
     setLoading(true);
     axios.get(
-      "http://192.168.1.102:5000/v1/insurance/policy",
+      "http://35.190.192.18/v1/insurance/policy",
       {
         headers: {
           "Authorization": token,
@@ -79,12 +79,9 @@ const Home = (props) => {
     });
   }
 
-  useEffect(() => {
-
-  }, []);
-
   const policyLoop = policies && policies.map((item, index) => {
 
+    console.log(456456, item)
     let humDeparture = '--';
     if (item.departureScheduledTimeTimestamp) {
       humDeparture = moment.unix(item.departureScheduledTimeTimestamp).format('MMMM Do YYYY, h:mm:ss a');
@@ -137,6 +134,9 @@ const Home = (props) => {
         <View style={styles.inputWrap}>
           <Button
             style={styles.buttonStyle}
+            onPress={() => {
+              navigation.navigate('Details', { policyId: item.referenceId });
+            }}
           >
             View Details
           </Button>
