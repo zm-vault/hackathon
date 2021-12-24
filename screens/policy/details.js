@@ -119,14 +119,12 @@ const Details = (props) => {
     )
     .then((response) => {
       setLoading(false);
-      if (response.data) {
-        setHasAccepted(true);
-      }
+      setHasAccepted(true);
     })
     .catch((e) => {
-      console.log(e);
       setLoading(false);
       if (e.response.data.err_msg) {
+        console.log(e.response);
         setError(e.response.data.err_msg);
       } else {
         setError('There was an error.');
@@ -169,9 +167,7 @@ const Details = (props) => {
     )
     .then((response) => {
       setLoading(false);
-      if (response) {
-        setHasRejected(true);
-      }
+      setHasRejected(true);
     })
     .catch((e) => {
       console.log(e);
@@ -197,42 +193,44 @@ const Details = (props) => {
   }
 
   if (hasAccepted || hasRejected) {
-    <ScrollView style={styles.container}>
-      <StatusBar style="light" />
-      <View style={styles.cardCon}>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>
-            {hasAccepted ? (
-              'Policy Accepted'
-            ) : (null)}
-            {hasRejected ? (
-              'Policy Rejected'
-            ) : (null)}
-          </Text>
-          <View style={styles.cardContent}>
-            {hasAccepted ? (
-              <Text>
-                You have accepted the policy. This may take a minute to reflect in the app.
-              </Text>
-            ) : (null)}
-            {hasRejected ? (
-              <Text>
-                You have rejected the policy. This may take a minute to reflect in the app.
-              </Text>
-            ) : (null)}
-            <View style={styles.inputWrap}>
-              <Button
-                style={styles.buttonStyle}
-                onPress={() => navigation.reset({index: 0, routes: [{name: 'Home'}],})}
-              >
-                View Policies
-              </Button>
+    return (
+      <ScrollView style={styles.container}>
+        <StatusBar style="light" />
+        <View style={styles.cardCon}>
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>
+              {hasAccepted ? (
+                'Policy Accepted'
+              ) : (null)}
+              {hasRejected ? (
+                'Policy Rejected'
+              ) : (null)}
+            </Text>
+            <View style={styles.cardContent}>
+              {hasAccepted ? (
+                <Text>
+                  You have accepted the policy. This may take a minute to reflect in the app.
+                </Text>
+              ) : (null)}
+              {hasRejected ? (
+                <Text>
+                  You have rejected the policy. This may take a minute to reflect in the app.
+                </Text>
+              ) : (null)}
+              <View style={styles.inputWrap}>
+                <Button
+                  style={styles.buttonStyle}
+                  onPress={() => navigation.reset({index: 0, routes: [{name: 'Home'}],})}
+                >
+                  View Policies
+                </Button>
+              </View>
             </View>
           </View>
         </View>
-      </View>
-      <View style={styles.bottomSpacer} />
-    </ScrollView>
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
+    );
   }
 
   return (
@@ -297,6 +295,20 @@ const Details = (props) => {
                 {policy.moreThan6HoursAmount || '--'}
               </Text>
             </View>
+            {policy && policy.status === 'REQUESTED' ? (
+              <View>
+                <View style={styles.inputWrap}>
+                  <Button
+                    style={styles.buttonStyle}
+                    onPress={() => isLoggedIn()}
+                  >
+                    Refresh Policy
+                  </Button>
+                </View>
+              </View>
+            ) : (
+              null
+            )}
 
             {policy && policy.status === 'PENDING' ? (
               <View>
